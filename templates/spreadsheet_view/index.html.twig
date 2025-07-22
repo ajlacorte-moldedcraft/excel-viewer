@@ -5,7 +5,7 @@
 <h1>Upload an Excel file</h1>
 
 <form action="{{ path('handle_excel_upload') }}" method="POST" enctype="multipart/form-data">
-    <input type="file" name="excel_file" />
+    <input type="file" name="excel_file" accept=".xlsx,.xls" required>
     <button type="submit">Upload</button>
 </form>
 {% endblock %}
