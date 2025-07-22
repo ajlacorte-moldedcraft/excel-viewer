@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block title %}Upload Excel File{% endblock %}
+
+{% block body %}
+<h1>Upload an Excel file</h1>
+
+<form action="{{ path('handle_excel_upload') }}" method="POST" enctype="multipart/form-data">
+    <input type="file" name="excel_file" />
+    <button type="submit">Upload</button>
+</form>
+{% endblock %}

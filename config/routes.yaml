@@ -1,0 +1,6 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+log_upload:
+  path: /upload
+  controller: App\Controller\LogController::upload
