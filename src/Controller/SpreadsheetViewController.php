@@ -20,32 +20,26 @@ class SpreadsheetViewController extends AbstractController
     /**
      * @Route("/upload-excel", name="handle_excel_upload", methods={"POST"})
      */
-public function handleUpload(Request $request): Response
-{
-    $file = $request->files->get('excel_file');
+    public function handleUpload(Request $request): Response
+    {
+        $file = $request->files->get('excel_file');
 
-    if (!$file) {
-        $this->addFlash('error', 'No file uploaded.');
-        return $this->redirectToRoute('home');
+        if (!$file) {
+            $this->addFlash('error', 'No file uploaded.');
+            return $this->redirectToRoute('home');
+        }
+
+        $newFilename = uniqid() . '.' . $file->guessExtension();
+
+        try {
+            $file->move($this->getParameter('kernel.project_dir') . '/public/uploads', $newFilename);
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Upload failed.');
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->redirectToRoute('view_excel', ['filename' => $newFilename]);
     }
-
-    $newFilename = uniqid() . '.' . $file->guessExtension();
-
-    $uploadPath = $this->getParameter('kernel.project_dir') . '/public/uploads';
-
-    if (!is_dir($uploadPath)) {
-        throw new \RuntimeException("Upload directory does not exist: $uploadPath");
-    }
-
-    try {
-        $file->move($uploadPath, $newFilename);
-    } catch (\Exception $e) {
-        throw new \RuntimeException('Upload failed: ' . $e->getMessage());
-    }
-
-    return $this->redirectToRoute('view_excel', ['filename' => $newFilename]);
-}
-
 
     /**
      * @Route("/view-excel/{filename}", name="view_excel")
